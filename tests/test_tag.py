@@ -123,6 +123,25 @@ def test_queue_stub_prints_first():
     assert "['track','pageview','props','optOut','optIn','ready']" in queue_stub()
 
 
+STUB = queue_stub()
+
+
+def test_queue_stub_alone_prints_when_the_tag_is_off():
+    # Forced off, with page props: only the stub, so privatus.track calls do not throw.
+    off = {"enabled": False, "props": {"plan": "pro"}}
+    assert tag(queue_stub=True, overrides=off) == STUB
+    assert tag(queue_stub=True, nonce="abc", overrides=off) == queue_stub(nonce="abc")
+    assert tag(overrides={**off, "queue_stub": True}) == STUB
+    # Off by default outside production, and without a site id.
+    assert render_tag(Config(site_id=SITE, queue_stub=True, props={"plan": "pro"})) == STUB
+    assert render_tag(Config(enabled=True, queue_stub=True)) == STUB
+
+
+def test_nothing_prints_when_the_tag_is_off_without_the_queue_stub():
+    assert tag(props={"plan": "pro"}, overrides={"enabled": False}) == ""
+    assert tag(queue_stub=True, overrides={"enabled": False, "queue_stub": False}) == ""
+
+
 def test_inject_tag():
     assert (
         inject_tag("<html><HEAD></Head><body></body></html>", "<x>") == "<html><HEAD><x>\n</head><body></body></html>"

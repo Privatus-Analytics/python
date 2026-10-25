@@ -69,7 +69,14 @@ def nasty() -> str:
 
 @app.get("/off")
 def off() -> str:
+    # Off with the queue stub on: only the stub prints, so privatus.track still works.
     return render_template("off.html", page_props=PAGE_PROPS)
+
+
+@app.get("/off-plain")
+def off_plain() -> str:
+    # Off with the queue stub off: nothing prints.
+    return render_template("off_plain.html", page_props=PAGE_PROPS)
 
 
 @auto_app.get("/auto")

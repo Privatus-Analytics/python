@@ -9,4 +9,5 @@
 - Starlette and FastAPI support: a `Jinja2Templates` helper and an optional ASGI middleware.
 - Page props: send groups such as plan or role with every pageview and event.
 - Uses the framework's Content Security Policy nonce when there is one.
+- With `queue_stub` on, a tag that is off still prints the queue stub (and nothing else), so `privatus.track` calls never fail in development.
 - Skips Django when `DEBUG` is on, Flask in debug or testing mode, and everything else outside production by default.

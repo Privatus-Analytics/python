@@ -51,6 +51,14 @@ def test_event_attributes_render_even_when_the_tag_is_off():
     assert render("{% privatus_analytics %}") == ""
 
 
+@override_settings(PRIVATUS_ANALYTICS={"site_id": SITE, "enabled": False, "queue_stub": True})
+def test_only_the_queue_stub_prints_when_the_tag_is_off():
+    result = render("{% privatus_analytics %}")
+    assert result.startswith("<script>window.privatus=window.privatus||{q:[]};")
+    assert "pa.js" not in result
+    assert "privatusPageProps" not in result
+
+
 @override_settings(PRIVATUS_ANALYTICS=ON)
 def test_tag_overrides_and_escaping():
     result = render('{% privatus_analytics modules="engage,auto" spa="hash" %}')

@@ -145,13 +145,15 @@ def render_tag(config: Optional[Config] = None, *, request: Any = None, **overri
 
     ``overrides`` replaces any Config setting for this one call. ``props`` is
     merged on top of the configured props instead of replacing them.
-    Returns an empty string without a site id or when disabled.
+    When the tag is off (disabled, or no site id) it prints only the queue
+    stub when ``queue_stub`` is on, so ``privatus.track`` calls in your own
+    JavaScript do not fail in development, and otherwise nothing.
     """
     base = config if config is not None else Config()
     call_props = overrides.pop("props", None)
     config = dataclasses.replace(base, **overrides) if overrides else base
     if not config.should_render():
-        return SafeHTML("")
+        return queue_stub(nonce=config.nonce) if config.queue_stub else SafeHTML("")
 
     props = _resolve_props(base.props, request)
     if call_props is not None:

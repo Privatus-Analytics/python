@@ -135,7 +135,8 @@ In production it prints:
 ```
 
 The tag prints nothing when there is no site id, and nothing in development
-(see below). Every value is HTML-escaped.
+(see below). The one exception is the queue stub: when you turn it on, it
+still prints. Every value is HTML-escaped.
 
 If your app uses a Content Security Policy (CSP, a list of rules that tells
 the browser which scripts may run) with a nonce (a random code that marks a
@@ -233,6 +234,10 @@ prints nothing:
 * Django: when `DEBUG` is on.
 * Flask: when `app.debug` or `app.testing` is on.
 * Starlette, FastAPI and plain Python: unless `PRIVATUS_ENV=production`.
+
+If `queue_stub` is on, the tag still prints the small queue stub (and nothing
+else), so `privatus.track` calls in your own JavaScript keep working. They
+wait in a queue and are never sent.
 
 To see the tag while you build, set `"enabled": True`. The tracker also
 ignores `localhost` unless you pass `data-allow-local` or `data-debug` (see
@@ -368,6 +373,11 @@ the calls until the tracker is ready:
 ```html
 <script>window.privatus=window.privatus||{q:[]};['track','pageview','props','optOut','optIn','ready'].forEach(function(m){window.privatus[m]=window.privatus[m]||function(){window.privatus.q.push([m,Array.prototype.slice.call(arguments)])}})</script>
 ```
+
+The stub prints even when the tag is off (in development, or with
+`"enabled": False`). Only the stub prints then: no tracker and no page
+props. So your `privatus.track` calls never fail; they wait in the queue and
+are never sent.
 
 In plain Python, `queue_stub(nonce=...)` returns the same script.
 

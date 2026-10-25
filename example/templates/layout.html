@@ -1,0 +1,11 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>{% block title %}Privatus conformance{% endblock %}</title>
+{{ privatus_analytics(props=page_props, queue_stub=True) }}
+</head>
+<body>
+{% block body %}{% endblock %}
+</body>
+</html>

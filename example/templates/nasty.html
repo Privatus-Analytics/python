@@ -1,0 +1,6 @@
+{% extends "layout.html" %}
+{% block title %}Nasty{% endblock %}
+{% block body %}
+<h1>Nasty values</h1>
+<button type="button" {{ privatus_event("Nasty value", {"nasty": nasty}) }}>Nasty</button>
+{% endblock %}

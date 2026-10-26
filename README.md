@@ -1,19 +1,45 @@
 # Privatus Analytics for Python
 
-Adds the cookieless [Privatus Analytics](https://privatusanalytics.com)
-tracking script to your Django, Flask, FastAPI or Starlette app. You get a
-template tag, and an optional middleware that puts the script in the `<head>`
-for you.
+**Simple, private website analytics for your Python web app. No cookies, honest numbers,
+and a dashboard you understand in seconds.**
 
-Privatus Analytics counts visits, sources, pages and conversions without
-cookies, local storage or fingerprinting (guessing who someone is from their
-browser settings). So analytics does not need a consent banner by itself.
-Check with your own lawyer for your country.
+## Why Privatus Analytics
 
-The package only prints HTML: the browser script tag and a few HTML
-attributes. It never sends events from your server, sets no cookies and reads
-nothing about your visitors. You need a Privatus Analytics account to see
-reports, and there is a free plan. Sign up at https://privatusanalytics.com.
+**Google Analytics is slow, confusing and hungry for data.** It sends what your
+visitors do to Google. In many countries it means showing a cookie pop-up (the box
+that asks visitors to accept cookies), and many people click "reject", so you never
+see them. Bots pad the numbers that are left.
+
+**Privatus Analytics fixes that.** It counts visits to your Python web app without cookies and
+never stores IP addresses. Bots are filtered out before they are counted. Your
+data is never sold or shared.
+
+What you get:
+
+- **A dashboard you understand in seconds.** Visitors, top pages and where people
+  came from, all on one screen.
+- **No cookie pop-up needed for our analytics.** We set no cookies and store no
+  personal data. Laws differ by country, so check your own legal advice.
+- **Honest numbers.** Known bots and fake traffic are left out on every plan.
+- **A fast site.** The tracking script is about 3 KB, tiny next to most tracking tags.
+- **Data you own.** We never sell it or show you ads, and you can pull it out
+  any time through the API.
+
+**Start free.** The Free plan has 10,000 events a month and 3 sites, with no card.
+Every new account also gets 14 days of Pro free, with no card.
+[Create your account](https://privatusanalytics.com).
+
+## What this package does
+
+- Works with Django, Flask, FastAPI and Starlette.
+- A template tag, and an optional middleware that puts the script in the
+  `<head>` for you.
+- The package only prints HTML: the browser script tag and a few HTML
+  attributes. It never sends events from your server, sets no cookies and reads
+  nothing about your visitors.
+
+You need a Privatus Analytics account to see your reports, and there is a
+free plan. [Sign up at privatusanalytics.com](https://privatusanalytics.com).
 
 ## Requirements
 
@@ -168,7 +194,7 @@ PRIVATUS_ANALYTICS = {"site_id": "pa_YOURSITEID", "auto_inject": True}
 It adds the tag just before `</head>` in uncompressed `text/html` responses
 with status 200, and fixes the `Content-Length` header. It skips Ajax
 requests (background requests sent by JavaScript), pages without a `<head>`,
-and pages that already have the tag. Responses that carry a
+and pages that already have the tag. Responses that have a
 `Content-Encoding` header (compressed responses) are left alone, so add the
 middleware where it runs before compression, or use the template tag.
 
@@ -352,7 +378,7 @@ stay numbers and booleans, and lists stay lists (at most 30 items). The data
 is escaped so it is safe inside a `<script>` element.
 
 **Never put names, emails, user ids or anything else that points to one
-person in props.** Privatus counts visitors without any id. Put groups
+person in props.** Privatus Analytics counts visitors without any id. Put groups
 (plan, role), not people. The server also removes emails and long ids it
 finds.
 
@@ -376,7 +402,7 @@ the calls until the tracker is ready:
 
 The stub prints even when the tag is off (in development, or with
 `"enabled": False`). Only the stub prints then: no tracker and no page
-props. So your `privatus.track` calls never fail; they wait in the queue and
+props. So your `privatus.track` calls never fail. They wait in the queue and
 are never sent.
 
 In plain Python, `queue_stub(nonce=...)` returns the same script.
